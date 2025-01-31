@@ -15,22 +15,10 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                // Build the Flask and MySQL images
-                sh 'docker build -t vallelym/task2-pipeline:flask-app ./flask-app'
-                sh 'docker build -t vallelym/task2-pipeline:db ./db'
-            }
-        }
-
-        stage('Push to Docker Hub') {
-            steps {
-                script {
-                    // Login to Docker Hub
-                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
-
-                    // Push the images
-                    sh 'docker push vallelym/task2-pipeline:flask-app'
-                    sh 'docker push vallelym/task2-pipeline:db'
-                }
+                // Build the Flask and MySQL images using Buildx
+                sh 'docker buildx create --use'
+                sh 'docker buildx build --platform linux/amd64 -t vallelym/task2-pipeline:flask-app ./flask-app --push'
+                sh 'docker buildx build --platform linux/amd64 -t vallelym/task2-pipeline:db ./db --push'
             }
         }
 
