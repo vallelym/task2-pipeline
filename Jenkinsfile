@@ -27,11 +27,13 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
-                        def app = docker.build("${DOCKER_IMAGE}:${env.BUILD_ID}")
-                        app.push()
+                        def flaskApp = docker.build("${DOCKER_IMAGE}:flask-app-${env.BUILD_ID}", "./flask-app")
+                        def dbApp = docker.build("${DOCKER_IMAGE}:db-${env.BUILD_ID}", "./db")
+                        flaskApp.push()
+                        dbApp.push()
                     }
                 }
             }
         }
     }
-}    
+}
