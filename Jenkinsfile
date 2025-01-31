@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-credentials')
         DOCKER_IMAGE = 'vallelym/task2-pipeline'
-    
+    }
     stages {
         stage('Clone Repository') {
             steps {
@@ -34,4 +34,4 @@ pipeline {
             }
         }
     }
-    
+}    
