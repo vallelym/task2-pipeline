@@ -7,8 +7,5 @@ FROM mysql:5.7
 ENV MYSQL_ROOT_PASSWORD=my-secret-pw
 ENV MYSQL_DATABASE=my_database
 
-# Add the content of the .sql file to your image
-# All scripts copied to docker-entrypoint-initdb.d/ are automatically
-COPY createTable.sql /docker-entrypoint-initdb.d/
-# executed during container startup
+# Expose the MySQL port
 EXPOSE 3306
