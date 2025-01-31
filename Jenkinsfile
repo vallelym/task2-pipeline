@@ -1,6 +1,10 @@
 pipeline {
     agent any
-
+    
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('docker-hub-credentials')
+        DOCKER_IMAGE = 'vallelym/task2-pipeline'
+    
     stages {
         stage('Clone Repository') {
             steps {
@@ -18,5 +22,16 @@ pipeline {
                 sh './deploy.sh'
             }
         }
+        
+        stage('Push to DockerHub') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials') {
+                        def app = docker.build("${DOCKER_IMAGE}:${env.BUILD_ID}")
+                        app.push()
+                    }
+                }
+            }
+        }
     }
-}
+    
